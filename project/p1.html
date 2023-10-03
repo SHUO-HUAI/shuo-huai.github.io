@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html" xml:lang="en">
+<head>
+    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css"/>
+    <script type="text/javascript" src="../js/main.js"></script>
+    <link rel="shortcut icon" href="../img/favicon.png"/>
+    <link rel="bookmark" href="../img/favicon.png" type="image/x-icon" 　/>
+    <title>Learning Compact DNNs for Latency-Critical Edge Systems</title>
+</head>
+<body style="overflow:hidden;">
+
+<!--<div style="height: 100%; width: 100%">-->
+
+<div class="pbimg1">
+
+    <img src="../img/pbg1.png" style=" opacity: 50%; width:auto; height: auto; max-width: 100%; max-height: 100%; "
+         alt=""/>
+</div>
+
+<div class="pbimg2">
+    <img src="../img/pbg2.png"
+         style=" opacity: 50%; float: right; width:auto; height: auto; max-width: 100%; max-height: 100%;" alt=""/>
+
+</div>
+
+<div class="pbcontent">
+    <div class="pbcontent_inter">
+         <div class="pbcontent_inter_title">
+            <h0>Learning Compact DNNs for Latency-Critical Edge Systems</h0>
+        </div>
+        <div style="width: 100%; right: 0; left: 0; margin: auto;  text-align: center;  vertical-align: middle; ">
+            <br/> <br/>
+            <img src="images/p1_1.png" alt="" style="width: 90%; height: auto">
+            <h5>The Process of <i>ZeroBN</i> Compact DNN Training.</h5>
+        </div>
+        <div style=" width: 100%;">
+            <h2>Source</h2>
+            <p>Please refer to the following:</p>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll">
+                <pre style="color: white">
+<p style="color: #df2c4e; display: inline">@inproceedings</p>{huai2021zerobn,
+    title={Zerobn: Learning compact neural networks for latency-critical edge systems},
+    author={Huai, Shuo<p style="color: #2493cc; display: inline"> and</p> Zhang, Lei <p
+                        style="color: #2493cc; display: inline">and</p> Liu, Di <p
+                        style="color: #2493cc; display: inline">and</p> Liu, Weichen <p
+                        style="color: #2493cc; display: inline">and</p> Subramaniam, Ravi},
+    booktitle={<p style="color: #df2c4e; display: inline">2021 58th</p> ACM/IEEE Design Automation Conference (DAC)},
+    pages={<p style="color: #df2c4e; display: inline">151</p>--<p style="color: #df2c4e; display: inline">156</p>},
+    year={<p style="color: #df2c4e; display: inline">2021</p>},
+    organization={IEEE}
+}</pre>
+            </div>
+            <br/>
+            <p>Open-Source: <a href="https://github.com/ntuliuteam/ZeroBN">https://github.com/ntuliuteam/ZeroBN.</a></p>
+            <h2>Abstract</h2>
+            <p>Edge devices have been widely adopted to bring deep
+                learning applications onto low power embedded systems, mitigating the
+                privacy and latency issues of accessing cloud servers. The increasingly
+                computational demand of complex neural network models leads to large
+                latency on edge devices with limited resources. Many application scenarios are real-time and have a
+                strict latency constraint, while conventional
+                neural network compression methods are not latency-oriented. In this
+                work, we propose a novel compact neural networks training method
+                to reduce the model latency on latency-critical edge systems. A latency
+                predictor is also introduced to guide and optimize this procedure. Coupled
+                with the latency predictor, our method can guarantee the latency for a
+                compact model by only one training process. The experiment results
+                show that, compared to state-of-the-art model compression methods,
+                our approach can well-fit the ‘hard’ latency constraint by significantly
+                reducing the latency with a mild accuracy drop. To satisfy a 34ms latency
+                constraint, we compact ResNet-50 with 0.82% of accuracy drop. And for
+                GoogLeNet, we can even increase the accuracy by 0.3%.</p>
+            <h2>Introduction</h2>
+            Deep Neural Networks (DNNs) have brought significant breakthroughs in many different applications, such as
+            image recognition
+
+            and natural language processing. With the increasing pressure of
+            computational demand on cloud servers as well as concerns over
+            data confidentiality, current DNN models have been adopted and
+            implemented on edge devices, i.e. autonomous vehicles, healthcare,
+
+            etc. While DNN models are well-known to be computation-
+            intensive and have become deeper and wider to pursue higher
+
+            accuracy, edge devices are resource-constrained in many scenarios.
+            As a result, this prohibits state-of-the-art DNN models from being
+            efficiently deployed on these resource-constrained edge devices.<br><br>
+            Many efforts are conducted towards reducing the complexity of
+            DNN models in order to fit them into edge devices, such as network
+            pruning and quantization. Among these approaches,
+            network pruning is deemed as a promising technique to reduce
+            the complexity of DNN models. Nevertheless, existing approaches
+            suffer from two flaws. Firstly, these methods are hardware-agnostic
+            as they only use indirect performance metrics, such as FLOPs and
+            MACs as the compression target. These indirect performance metrics
+            cannot directly translate to its practical performance, like latency
+
+            and throughput. These existing methods are not suitable for latency-critical edge systems like self-driving
+            vehicles. Therefore, to achieve
+
+            an efficient edge intelligence system, we should directly compact
+            DNN models considering the latency as the target.<br><br>
+            Second, network pruning involves a time-consuming procedure
+            to have a competitive and compact model. Conventional network
+            pruning starts with a pre-trained model, and then a defined metric is
+            exploited to identify and remove the redundant weights or channels.
+            After the pruning, retraining is conducted to retain the accuracy
+            of the pruned model. The high overhead of network pruning is mainly from the model pre-training and
+            re-training procedures. Many
+            prior pruning methods have to take the pruning-retraining
+            procedure for several iterations in order to derive a model that
+            meets the pruning target, e.g., smaller than a number of FLOPs
+            or compression ratio. Moreover, edge systems are usually subject
+            to latency requirements. To have a compact model satisfying the
+            temporal requirement upon target hardware, the indirect pruning
+            target has to be adjusted iteratively and the prune-in-progress model
+            has to be repeatedly evaluated on the real-platform. This exacerbates
+            the overhead issue.<br><br>
+            To address the aforementioned problems, we propose a novel
+            framework, named ZeroBN, to learn compact DNNs under a ‘hard’
+            latency constraint upon targeted hardware by dynamically zeroizing
+            and recovering Batch Normalization (BN) layers. The key novelty
+
+            of our work is twofold. Firstly, instead of going through a time-consuming pruning procedure, we directly
+            learn a compact DNN
+
+            model from a given model by one training process. Secondly,
+            we exploit a latency predictor with our training method to learn
+            a compact DNN model, directly satisfying the latency constraint
+            required on an edge system. Specifically, the main contributions of
+            this paper are summarized:<br><br>
+            <ul>
+                <li><p> We propose a novel compact model training method ZeroBN that
+                    can extract the optimal architecture to satisfy a ‘hard’ latency
+                    constraint by only one training process.</p></li>
+                <li><p>We propose a scheme applying the global importance rank of
+                    channels and constructing a dynamic Zero-Recovery training
+                    process. It extends the exploration space of ZeroBN to learn
+                    the optimal architecture.</p></li>
+                <li><p>We propose a machine learning-based latency predictor, which
+                    is embedded into ZeroBN to provide a compression ratio for
+                    each Zero phase.</p></li>
+                <li><p>We demonstrate the efficiency and effectiveness of our ZeroBN
+
+                    with extensive experiments. Without the need to perform refinement, our method does not cause a
+                    large accuracy drop
+
+                    compared to the original model. On CIFAR-10 dataset, we
+                    even improve the accuracy of all models by 0.24% to 0.32%.
+                    On ImageNet-100 dataset, under a latency constraint, we
+                    improve 0.3% accuracy for GoogLeNet.</p></li>
+            </ul>
+
+        </div>
+        <br><br>
+        <div style="position: absolute; left: 0; background-color: rgba(183,179,179,0.16); width: 100%">
+            <a href="../index.html#projects">Home Page</a>
+
+        </div>
+        <div style="position: absolute; right: 0; ">
+            <a href="https://drive.google.com/file/d/1L4KXKBhCvggbZbSJpI5j6KxBiW8Y2Hrp/view">Full Text </a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html" xml:lang="en">
+<head>
+    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css"/>
+    <script type="text/javascript" src="../js/main.js"></script>
+    <link rel="shortcut icon" href="../img/favicon.png"/>
+    <link rel="bookmark" href="../img/favicon.png" type="image/x-icon" 　/>
+    <title>Collaborative DNNs Learning for Multiple Latency-Critical Edge Systems</title>
+</head>
+<body style="overflow:hidden;">
+
+<!--<div style="height: 100%; width: 100%">-->
+
+<div class="pbimg1">
+
+    <img src="../img/pbg1.png" style=" opacity: 50%; width:auto; height: auto; max-width: 100%; max-height: 100%; "
+         alt=""/>
+</div>
+
+<div class="pbimg2">
+    <img src="../img/pbg2.png"
+         style=" opacity: 50%; float: right; width:auto; height: auto; max-width: 100%; max-height: 100%;" alt=""/>
+
+</div>
+
+<div class="pbcontent">
+    <div class="pbcontent_inter">
+        <div class="pbcontent_inter_title">
+            <h0>Collaborative DNNs Learning for Multiple Latency-Critical Edge Systems</h0>
+        </div>
+        <div style="width: 100%; right: 0; left: 0; margin: auto;  text-align: center;  vertical-align: middle; ">
+            <br/> <br/>
+            <img src="images/p2_1.png" alt="" style="width: 75%; height: auto">
+            <h5>The process of <i>Collate</i>. The top depicts the latency guarantee component, while the bottom shows
+                the
+                heterogeneous FL component.</h5>
+        </div>
+        <div style=" width: 100%;">
+            <h2>Source</h2>
+            <p>Please refer to the following:</p>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll">
+                <pre style="color: white">
+<p style="color: #df2c4e; display: inline">@inproceedings</p>{huai2022collate,
+    title={Collate: Collaborative Neural Network Learning for Latency-Critical Edge Systems},
+    author={Huai, Shuo<p style="color: #2493cc; display: inline"> and</p> Liu, Di <p
+                        style="color: #2493cc; display: inline">and</p> Kong, Hao <p
+                        style="color: #2493cc; display: inline">and</p> Luo, Xiangzhong <p
+                        style="color: #2493cc; display: inline">and</p> Liu, Weichen <p
+                        style="color: #2493cc; display: inline">and</p> Subramaniam, Ravi <p
+                        style="color: #2493cc; display: inline">and</p> Makaya, Christian <p
+                        style="color: #2493cc; display: inline">and</p> Lin, Qian},
+    booktitle={<p style="color: #df2c4e; display: inline">2022</p> IEEE <p
+                        style="color: #df2c4e; display: inline">40th</p> International Conference on Computer Design (ICCD) },
+    pages={<p style="color: #df2c4e; display: inline">627</p>--<p style="color: #df2c4e; display: inline">634</p>},
+    year={<p style="color: #df2c4e; display: inline">2022</p>},
+    organization={IEEE}
+}</pre>
+            </div>
+            <br/>
+            <p>Open-Source: <a href="https://github.com/ntuliuteam/Collate">https://github.com/ntuliuteam/Collate.</a>
+            </p>
+            <h2>Abstract</h2>
+            <p>Federated Learning (FL) empowers multiple clients to collaboratively learn a model, enlarging the
+                training data of each client for
+                high accuracy while protecting data privacy. However, when deploying
+                FL in real-time edge systems, the heterogeneity of devices among systems
+                has a severe impact on the performance of the inferred model. Existing
+                optimizations on FL focus on improving the training efficiency but fail to
+                speed up inference, especially when there is a latency constraint. In this
+                work, we propose Collate, a novel training framework that collaboratively
+                learns heterogeneous models to meet the latency constraints of multiple
+                edge systems simultaneously. We design a dynamic zeroizing-recovering
+                method to adjust each local model architecture for high accuracy under
+                its latency constraint. A proto-corrected federated aggregation scheme
+                is also introduced to aggregate all heterogeneous local models, satisfying
+                the latency constraint of different systems with only one training process
+                and maintaining high accuracy. Extensive experiments indicate that,
+                compared to state-of-the-art methods and under a latency constraint,
+                our extended models can improve the accuracy by 1.96% on average,
+                and our shrunk models can also obtain a 3.09% accuracy improvement
+                on average, with almost no extra training overhead.</p>
+            <h2>Introduction</h2>
+            Deep Neural Networks (DNNs) have brought significant breakthroughs in many different applications, such as
+            image recognition and natural language processing. With the emphasis on data privacy and
+            concerns over transmission stability, current DNN applications are increasingly deployed on edge devices,
+            such as autonomous vehicles, healthcare devices, etc. Meanwhile, DNN models require a huge
+            amount of training data to improve accuracy, but data in most industries are protected by
+            privacy laws and thus are required to be in the form of isolated islands. <br><br>
+            Federated Learning (FL) is designed to coordinate multiple clients to train a DNN model collaboratively
+            without sharing their original local data, and it is capable of preserving the data privacy and achieving
+            better accuracy than each individual client training with only its local data. This
+            addresses the issue of insufficient individual training data. However, in addition to accuracy, latency is
+            also an important metric for edge intelligent systems. With diverse edge devices that
+            demonstrate different computational capabilities emerging, the identical model trained by FL is not
+            efficient for all participating edge systems and cannot achieve a good balance between latency and accuracy.
+            When deploying the model into various edge systems, the
+            latency differs from 13.6 ms to 236.0 ms. When this application has a latency constraint (e.g., 30.0
+            ms), some systems can infer more complex models for higher accuracy, whereas others cannot even deploy the
+            model due to the limited memory and computational resources.<br><br>
+            Take a practical scenario from WeBank as an example. They need an edge FL
+            framework in which surveillance video data collected and stored in the edge cloud of each surveillance
+            company are not required to be uploaded to a central cloud for centralized model training. After each local
+            training iteration, only the model parameters from each surveillance company are sent to the FL server for
+            aggregation. The final federated-trained model is distributed to the participating surveillance companies
+            for object detection. However, different companies can use distinct edge devices and this application
+            features real-time, so it is necessary to train heterogeneous models for different companies to meet their
+            latency constraints.<br><br>
+            Some efforts have been made to use different DNN architectures to fit various clients in the training stage,
+            known as Heterogeneous FL. These methods mainly fall into two categories:
+            one is to fine-tune models for different clients from an identical global model,
+            and the other is to
+            directly learn from heterogeneous models without the same global model. However, these existing approaches
+            are designed for accelerating the training stage and cannot optimize the inference latency directly. When
+            the first one is employed in a latency-critical system, it can only train a specific network for one system
+            at a time until it trains for all systems using multiple FL processes, which imposes enormous training
+            overhead.
+            Although the second one can directly provide heterogeneous model architectures for different systems,
+            it requires some public datasets for transfer learning or an extra dataset for prototype
+            learning. Moreover, the absence of the same global model lead to an accuracy drop of
+            up to 10%. To guarantee the generality and accuracy of the FL scheme, our
+            method should be based on the first one.<br><br>
+            Meanwhile, when optimizing models under the latency constraint, we should not only reduce latency for
+            low-end systems but also extend models for powerful systems (e.g., Jetson TX2)
+            to improve their accuracy, in contrast to existing heterogeneous FL that only
+            reduces the training cost by shrinking models. Thus, we integrate the model extension into our learning
+            framework to better utilize each client. To our best knowledge, this is the first paper to optimize FL to
+            simultaneously meet the latency constraints of all participating systems while obtaining high accuracy.
+            Specifically, our main contributions are summarized as:<br><br>
+            <ul>
+                <li><p> We propose a novel model learning framework, <i>Collate</i>, that cultivates optimal DNN
+                    architectures collaboratively for multiple edge systems to obtain higher accuracy and satisfy their
+                    latency constraints with only one training process.</p></li>
+                <li><p>We present a proto-corrected aggregation scheme in the global training process to effectively
+                    aggregate all heterogeneous models from each edge system for higher accuracy.</p></li>
+                <li><p>We design a latency-aware local training scheme by a dynamic zeroizing-recovering training
+                    process. It extends the exploration space of <i>Collate</i> to discover the optimal DNN architecture
+                    for each edge system. </p></li>
+                <li><p>We demonstrate the effectiveness of <i>Collate</i>  with extensive experiments. Compared to the
+                    state-of-the-art methods and under the same latency constraints, our extended models can improve the
+                    accuracy by 1.96% on average, and the accuracy of shrunk models outperforms others by 3.09% on
+                    average. </p></li>
+            </ul>
+        </div>
+        <br><br>
+        <div style="position: absolute; left: 0; background-color: rgba(183,179,179,0.16); width: 100%">
+            <a href="../index.html#projects">Home Page</a>
+
+        </div>
+        <div style="position: absolute; right: 0; ">
+            <a href="https://ieeexplore.ieee.org/abstract/document/9978336">Full Text </a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

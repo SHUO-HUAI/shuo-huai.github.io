@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html" xml:lang="en">
+<head>
+    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css"/>
+    <script type="text/javascript" src="../js/main.js"></script>
+    <link rel="shortcut icon" href="../img/favicon.png"/>
+    <link rel="bookmark" href="../img/favicon.png" type="image/x-icon" 　/>
+    <title>Performance-aware Wear Leveling Placement Algorithm for Nonvolatile FPGAs</title>
+</head>
+<body style="overflow:hidden;">
+
+<!--<div style="height: 100%; width: 100%">-->
+
+<div class="pbimg1">
+
+    <img src="../img/pbg1.png" style=" opacity: 50%; width:auto; height: auto; max-width: 100%; max-height: 100%; "
+         alt=""/>
+</div>
+
+<div class="pbimg2">
+    <img src="../img/pbg2.png"
+         style=" opacity: 50%; float: right; width:auto; height: auto; max-width: 100%; max-height: 100%;" alt=""/>
+
+</div>
+
+<div class="pbcontent">
+    <div class="pbcontent_inter">
+        <div class="pbcontent_inter_title">
+            <h0>Performance-aware Wear Leveling Placement Algorithm for Nonvolatile FPGAs</h0>
+        </div>
+        <div style="width: 100%; right: 0; left: 0; margin: auto;  text-align: center;  vertical-align: middle; ">
+            <br/> <br/>
+            <img src="images/p4_1.png" alt="" style="width: 45%; height: auto">
+            <h5>Proposed CAD Synthesis Flow of Performance-aware Wear Leveling.</h5>
+        </div>
+        <div style=" width: 100%;">
+            <h2>Source</h2>
+            <p>Please refer to the following:</p>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll">
+                <pre style="color: white">
+<p style="color: #df2c4e; display: inline">@inproceedings</p>{huai2019performance,
+    title={Performance-aware wear leveling for block ram in nonvolatile fpgas},
+    author={Huai, Shuo<p style="color: #2493cc; display: inline"> and</p> Song, Weining <p
+                        style="color: #2493cc; display: inline">and</p> Zhao, Mengying <p
+                        style="color: #2493cc; display: inline">and</p> Cai, Xiaojun <p
+                        style="color: #2493cc; display: inline">and</p> Jia, Zhiping},
+    booktitle={Proceedings of the <p style="color: #df2c4e; display: inline">56th</p> Annual Design Automation Conference <p
+                        style="color: #df2c4e; display: inline">2019</p>},
+    pages={<p style="color: #df2c4e; display: inline">1</p>--<p style="color: #df2c4e; display: inline">6</p>},
+    year={<p style="color: #df2c4e; display: inline">2019</p>}
+}</pre>
+            </div>
+            <h2>Abstract</h2>
+            <p>Field programmable gate arrays (FPGAs) have been widely adopted
+                in both high-performance servers and embedded systems. Since
+                static random access memory (SRAM) has limited density and
+                comparatively high leakage power, researchers have proposed
+                FPGA architectures based on emerging non-volatile memories
+                (NVMs) to satisfy the requirements of data-intensive and low-power applications.
+                Block RAM is on-chip memory of FPGAs,
+                when it is implemented with NVM, it will face the challenge of
+                limited endurance. Traditional wear leveling strategy cannot be
+                directly applied to block RAM because it may induce large performance overhead. In this paper, we
+                propose a performance-aware
+                wear leveling scheme for block RAM in FPGAs to improve its
+                lifetime. The placement strategy is improved by injecting wear
+                leveling guidance. The evaluation shows that 29.75% lifetime enhancement is achieved with 16.32%
+                performance improvement
+                at the same time, compared with traditional wear leveling.</p>
+            <h2>Introduction</h2>
+            Nowadays, Field Programmable Gate Arrays (FPGAs) have become popular in many areas including embedded
+            systems, massively parallel computing, etc. On-chip block random access memory (BRAM) is an important
+            component in FPGAs, used for parameter and data storage. Currently, in the FPGA platforms, the
+            on-chip RAM is based on static random access memory (SRAM),
+            which has high leakage power and low memory density. As the
+            development of applications related to deep learning and big data
+            processing, the requirement on the capacity of on-chip block
+            RAM is continuously increasing. With the development of
+            process technology, the total BRAM capacity increases, but the static power of FPGA
+            platforms has exceeded
+            dynamic power. Therefore, SRAM has become the obstacle
+            of building high-capacity low-power FPGAs.<br><br>
+            To solve these problems, researchers propose to replace the
+            SRAM cell in FPGAs with non-volatile memory (NVM). Compared to SRAM, NVM has some advantages such as higher
+            density, lower static power consumption and non-volatility, which
+            bring FPGAs an opportunity to have more memory cells to break
+            through the bottleneck of insufficient capacity. A variety of FPGA
+            architectures are explored based on different NVMs, e.g., phase
+            change memory (PCM) based FPGA, spin-transfer torque
+            magnetic memory (STT-RAM) based FPGA, resistive random
+            access memory (RRAM) based FPGA and so on. Meanwhile, the gap between SRAM-based and STT-RAM-based BRAM
+            operating frequencies gets smaller with increasing BRAM
+            size.
+            This is due to the fact that STT-RAM-based BRAM operating
+            frequency is dominated by cell switching time which is constant
+            regardless of BRAM size. <br><br>
+            Even though nonvolatile FPGAs enjoy the large on-chip RAM
+            capacity and near-zero leakage power, they face challenges of
+            large program overhead and limited lifetime. For example, the
+            write endurance of RRAM is about 10<sup>12</sup>, while PCM is only 10<sup>9</sup>
+            . There are researches working on write reduction to NVM in
+            conventional memory systems, which can effectively reduce the
+            program cost, and simultaneously improve the lifetime to some
+            extent. Meanwhile, for NVM-based FPGAs platform, some
+            researches have proposed strategies to reduce or balance the
+            writing to configurable logic blocks (CLBs), connecting blocks
+            (CBs) and switch boxes (SBs). These works have made
+            good achievements, but compared to CLBs, CBs and SBs, BRAM
+            blocks are more likely to be worn out. Thus, we are considering
+            the lifetime improvement of BRAM blocks in this paper.<br><br>
+            Wear leveling (WL) is a group of work aiming to enhance
+            NVM lifetime, where the basic idea is to balance the writes across
+            various physical regions of NVM so that the lifetime is not limited to few early-worn portions. The
+            general idea is to dynamically swap the mapped address between highly written and
+            rarely written regions. However, the WL techniques proposed
+            in memory fields cannot directly be applied to BRAM in FPGAs.
+            This is because that the data placement among different BRAM
+            blocks highly affects the system performance in FPGAs and data
+            swapping aiming to lifetime optimization may induce high performance overhead. In order to achieve a balance
+            between performance and lifetime, we propose a performance-aware WL
+            mechanism. Specifically, the main contributions of this paper are
+            as follows:<br><br>
+            <ul>
+                <li><p> Propose to simultaneously consider lifetime and performance in WL for BRAM blocks in FPGA
+                    systems.</p></li>
+                <li><p>Design a performance-aware WL mechanism to balance
+                    write traffic between BRAM blocks. The placement strategy is improved by integrating write
+                    information so
+                    that
+                    multiple configuration files can be generated for dynamic
+                    switching.</p></li>
+                <li><p>Develop a simulator to evaluate performance and lifetime
+                    for non-volatile FPGAs. The evaluation results show significant lifetime improvement with little
+                    performance
+                    overhead.</p></li>
+            </ul>
+        </div>
+        <br><br>
+        <div style="position: absolute; left: 0; background-color: rgba(183,179,179,0.16); width: 100%">
+            <a href="../index.html#projects">Home Page</a>
+
+        </div>
+        <div style="position: absolute; right: 0; ">
+            <a href="https://picture.iczhiku.com/resource/ieee/sHkGEilhEiREECCM.pdf">Full Text </a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

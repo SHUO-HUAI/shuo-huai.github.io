@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html" xml:lang="en">
+<head>
+    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" href="../../css/main.css" type="text/css"/>
+    <script type="text/javascript" src="../../js/main.js"></script>
+    <link rel="shortcut icon" href="../../img/favicon.png"/>
+    <link rel="bookmark" href="../../img/favicon.png" type="image/x-icon" 　/>
+    <title>Archlinux Install</title>
+</head>
+<body style="overflow:hidden;">
+
+<!--<div style="height: 100%; width: 100%">-->
+
+<div class="pbimg1">
+
+    <img src="../../img/pbg1.png" style=" opacity: 50%; width:auto; height: auto; max-width: 100%; max-height: 100%; "
+         alt=""/>
+</div>
+
+<div class="pbimg2">
+    <img src="../../img/pbg2.png"
+         style=" opacity: 50%; float: right; width:auto; height: auto; max-width: 100%; max-height: 100%;" alt=""/>
+
+</div>
+
+<div class="pbcontent">
+    <div class="pbcontent_inter ">
+        <div class="pbcontent_inter_title">
+            <h0>ArchLinux 安装笔记</h0>
+        </div>
+        <!--        <div style="width: 100%; right: 0; left: 0; margin: auto;  text-align: center;  vertical-align: middle; ">-->
+        <!--<h1>（谨慎参考，机型有别）</h1>-->
+        <!--        </div>-->
+        <div style=" width: 100%;">
+            <h2>分区挂载</h2>
+            <p>按照Arch Wiki（<a href="https://wiki.archlinux.org/title/Installation_guide">https://wiki.archlinux.org/title/Installation_guide</a>）进行分区以及挂载（这里我安装的是双系统且是EFI的，所以需要挂载Windows引导分区到boot下的EFI里面，若是单系统可以按照Wiki新建引导分区挂载）。
+            </p>
+            <p>用Arch Linux Live CD安装Arch Linux时，应先分区，boot分区100M左右，swap分区8G左右，剩下的直接挂在到跟分区。然后在fdisk
+                用t命令修改boot分区为EFI分区模式，然后按照wiki里面，安装mkfs.fat 命令格式化boot分区。</p>
+
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll"> <pre style="color: white"><p
+                    style="color: #2493cc; display: inline">~</p> <p
+                    style="color: #df2c4e; display: inline"> fdisk -l</p>  //查看自己硬盘分区，应该至少包含根（/）分区，EFI分区
+            </pre>
+
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> mkfs.ext4 /dev/sdxk</p>  //将sdxk格式化为ext4 格式，sdxk应该为根（/）分区
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> mount /dev/sdxk /mnt</p>  //将根分区挂载到Live CD的/mnt下
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> mkdir /mnt/boot</p>
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> mount /dev/sdxm /mnt/boot </p>  //挂载boot分区到根分区的boot下，sdxm为EFI分区
+                </pre>
+            </div>
+
+            <h2>安装基本系统</h2>
+            <p>先编辑/etc/pacman.d/mirrorlist选择合适的源</p>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll"> <pre style="color: white"><p
+                    style="color: #2493cc; display: inline">~</p> <p
+                    style="color: #df2c4e; display: inline"> pacstrap -i /mnt base base-devel </p>  //安装系统到根分区
+            </pre>
+
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> genfstab -U /mnt >> /mnt/etc/fstab</p>  //更新分区表
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> arch-root  /mnt</p>  //chroot到新装的系统
+                </pre>
+            </div>
+            <h2>新系统</h2>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll"> <pre style="color: white"><p
+                    style="color: #2493cc; display: inline">~</p> <p
+                    style="color: #df2c4e; display: inline"> ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime </p>  //创建新的当地时间连接
+            </pre>
+
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> pacman -S vim</p>  //安装vim，比vi更强大的编辑器
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> vim /etc/locale.gen</p>   (添加 en_US.UTF-8 UTF-8 以及 zh_CN.UTF-8 UTF-8) //编码
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> locale-gen</p>   //更新刚刚写入的内容
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> echo yourhostname > /etc/hostname //yourhostname</p>   //yourhostname是你自己想起得主机名称
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> passwd</p>   //设置root密码
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> pacman -S iw wpa_supplicant dialog</p>   //无线wifi环境
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> pacman -S  grub efibootmgr</p>   //引导，EFI分区的
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH --recheck</p>    //写入grub.cfg
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> grub-mkconfig -o /boot/grub/grub.cfg</p>   //使grub.cfg生效 （有可能要将EFI/arch/grubx64.efi移到EFI/BOOT/BOOTX64.EFI）
+                </pre>
+                <pre style="color: white"><p
+                        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline"> pacman -S networkmanager</p>    //防止重启没有网络还要启动dhcpcd
+                </pre>
+
+            </div>
+            <h2>重启并去掉Live CD</h2>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll">
+            <pre style="color: white"><p
+                    style="color: #2493cc; display: inline">~</p> <p
+                    style="color: #df2c4e; display: inline">systemctl enable NetworkManager</p>
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">systemctl start Networkmanager</p> //启动Networkmanager
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">pacman -S xf86-video-intel</p>
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">pacman -S xorg xfce4 xfce4-goodies</p> //xfce4优化好还是不错的，并且是轻量级桌面
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">pacman -S lightdm lightdm-gtk-greeter</p>  //桌面管理器，同样是轻量级
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">systemctl enable lightdm.service</p>
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">useradd -m -G wheel yourusername</p>  //添加用户到wheel组
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">passwd yourusername</p>  //设置密码
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">vim /etc/sudoers</p>  //将该用户加入sudo组添加 yourusername ALL =(ALL) ALL
+            </pre>
+
+            </div>
+            <h2>重启并进入X界面</h2>
+            <div style="background-color: rgb(0,0,0); overflow-x: scroll">
+            <pre style="color: white"><p
+                    style="color: #2493cc; display: inline">~</p> <p
+                    style="color: #df2c4e; display: inline">sudo pacman -Syu</p>   //更新，以后要时常更新
+
+ <p
+         style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">sudo pacman -S adobe-source-han-serif-cn-fonts</p>   //安装汉字字体
+
+ <p
+         style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">sudo pacman -S network-manager-applet</p>   //网络管理的桌面图标
+
+ <p
+         style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">sudo pacman -S fcitx-configtool fcitx-im</p>   //安装fcitx中文输入法
+
+ <p
+         style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">vim ~/.xprofile</p>  //添加export GTK_IM_MODULE=fcitx 、 export QT_IM_MODULE=fcitx 、 export XMODIFIERS=@im=fcitx
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">sudo vim /etc/profile</p>  //添加 export GTK_IM_MODULE=fcitx export QT_IM_MODULE=fcitx export XMODIFIERS="@im=fcitx"
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">vim /etc/locale.conf</p>   //添加 LANG=en_US.UTF-8
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">sudo pacman -S pulseandio</p>   //声音
+
+<p
+        style="color: #2493cc; display: inline">~</p> <p
+                        style="color: #df2c4e; display: inline">sudo pacman -S pavucontrol</p>
+            </pre>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
